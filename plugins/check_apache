@@ -96,10 +96,20 @@ for(my $i=0; $i<@lines; $i++) {
     # This block handles the scorecard stuff
     if($lines[$i]=~m/^<\/dl><pre>/) {
         $lines[$i]=substr($lines[$i], 10);
-        while($i<@lines && !($lines[$i]=~m/^<\/pre>/)) {
+        #while($i<@lines && !($lines[$i]=~m/^.*<\/pre>/)) {
+        while($i<@lines) {
+            if ($lines[$i]=~m/^.*<\/pre>/)
+            {
+              $lines[$i]=substr($lines[$i], 0, -6);
+              my @chars = split(//, $lines[$i]);
+              foreach my $char(@chars) {
+                $counts{$char}++;
+              }
+              last;
+            }
             my @chars = split(//, $lines[$i]);
             foreach my $char(@chars) {
-                $counts{$char}++;
+              $counts{$char}++;
             }
             $i++;
         }
